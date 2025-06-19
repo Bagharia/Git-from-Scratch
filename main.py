@@ -4,6 +4,7 @@ from ggit.hash_object import hash_object
 from ggit.cat_file import cat_file
 from ggit.write_tree import write_tree     
 from ggit.commit_tree import commit_tree
+from ggit.add import git_add
 
 def main():
     parser = argparse.ArgumentParser()
@@ -29,6 +30,10 @@ def main():
     commit_parser.add_argument("-m", "--message", required=True)
     commit_parser.add_argument("-p", "--parent")
 
+    # add
+    add_parser = subparsers.add_parser("add")
+    add_parser.add_argument("path")
+
     args = parser.parse_args()
 
     if args.command == "init":
@@ -42,6 +47,8 @@ def main():
     elif args.command == "commit-tree":
         from ggit.commit_tree import commit_tree
         commit_tree(args.tree_sha, args.message, args.parent)
+    elif args.command == "add":
+        git_add(args.path)
     else:
         print(f"Unknown command {args.command}")
 

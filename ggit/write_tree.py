@@ -1,36 +1,39 @@
 import os
 import hashlib
-import zlib
 from ggit.utils import compute_sha1_and_store
 
 def write_tree():
     entries = []
 
-    for root, dirs, files in os.walk("."):
-        # Ignore .ggit et tout son contenu
-        if root.startswith("./.ggit"):
-            continue
+    index_path = ".ggit/index"
 
-        for filename in files:
-            path = os.path.join(root, filename)
+    # 1. Vérifie si l'index existe
+    if not os.path.exists(index_path):
+        print("Nothing to write. Index is empty.")
+        return
 
-            # créer/écrire le blob et récupérer son SHA
-            with open(path, "rb") as f:
-                blob_sha = compute_sha1_and_store(f.read())
+    # 2. Parcourt les fichiers listés dans l'index
+    with open(index_path, "r") as f:
+        for line in f:
+            sha1, path = line.strip().split(" ", 1)
 
-            # 2) constituer l’entrée binaire
-            mode = b"100644"                     # fichier « normal »
-            name = filename.encode()
-            raw_sha = bytes.fromhex(blob_sha)    # 20 octets bruts
+            # 3. Prépare l’entrée binaire du tree
+            mode = b"100644"                     # fichier « normal »
+            name = os.path.basename(path).encode()
+            raw_sha = bytes.fromhex(sha1)        # SHA1 brut sur 20 octets
+
+            # 4. Ajoute l’entrée à la liste
             entries.append(mode + b" " + name + b"\0" + raw_sha)
 
-    # construire l'objet tree complet
+    # 5. Construit le contenu complet de l’objet tree
     tree_content = b"".join(entries)
+
+    # 6. Crée l’en-tête (header) et concatène
     header = f"tree {len(tree_content)}\0".encode()
     store = header + tree_content
 
-    # stocker le tree (compression + écriture) et obtenir son SHA
+    # 7. Stocke l’objet (compression + écriture) et récupère son SHA
     tree_sha = compute_sha1_and_store(store)
 
-    # afficher le SHA du tree
+    # 8. Affiche le SHA du tree
     print(tree_sha)

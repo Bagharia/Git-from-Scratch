@@ -7,6 +7,7 @@ from ggit.commit_tree import commit_tree
 from ggit.add import git_add
 from ggit.rm import git_rm
 from ggit.commit import git_commit  
+from ggit.status import git_status
 
 def main():
     parser = argparse.ArgumentParser()
@@ -44,6 +45,9 @@ def main():
     commit_porcelain = subparsers.add_parser("commit")
     commit_porcelain.add_argument("-m", "--message", required=True)
 
+    # status
+    subparsers.add_parser("status")
+
     args = parser.parse_args()
 
     if args.command == "init":
@@ -63,6 +67,8 @@ def main():
         git_rm(args.paths)
     elif args.command == "commit":
         git_commit(args.message)
+    elif args.command == "status":
+        git_status()
     else:
         print(f"Unknown command {args.command}")
 

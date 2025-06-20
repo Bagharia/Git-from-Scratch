@@ -37,3 +37,5 @@ def write_tree():
 
     # 8. Affiche le SHA du tree
     print(tree_sha)
+
+    return tree_sha

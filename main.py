@@ -6,6 +6,7 @@ from ggit.write_tree import write_tree
 from ggit.commit_tree import commit_tree
 from ggit.add import git_add
 from ggit.rm import git_rm
+from ggit.commit import git_commit  
 
 def main():
     parser = argparse.ArgumentParser()
@@ -39,6 +40,10 @@ def main():
     rm_parser = subparsers.add_parser("rm")
     rm_parser.add_argument("paths", nargs="+") 
 
+    # commit  
+    commit_porcelain = subparsers.add_parser("commit")
+    commit_porcelain.add_argument("-m", "--message", required=True)
+
     args = parser.parse_args()
 
     if args.command == "init":
@@ -56,6 +61,8 @@ def main():
         git_add(args.path)
     elif args.command == "rm":
         git_rm(args.paths)
+    elif args.command == "commit":
+        git_commit(args.message)
     else:
         print(f"Unknown command {args.command}")
 

@@ -5,6 +5,7 @@ from ggit.cat_file import cat_file
 from ggit.write_tree import write_tree     
 from ggit.commit_tree import commit_tree
 from ggit.add import git_add
+from ggit.rm import git_rm
 
 def main():
     parser = argparse.ArgumentParser()
@@ -34,6 +35,10 @@ def main():
     add_parser = subparsers.add_parser("add")
     add_parser.add_argument("path")
 
+    # remove
+    rm_parser = subparsers.add_parser("rm")
+    rm_parser.add_argument("paths", nargs="+") 
+
     args = parser.parse_args()
 
     if args.command == "init":
@@ -49,6 +54,8 @@ def main():
         commit_tree(args.tree_sha, args.message, args.parent)
     elif args.command == "add":
         git_add(args.path)
+    elif args.command == "rm":
+        git_rm(args.paths)
     else:
         print(f"Unknown command {args.command}")
 

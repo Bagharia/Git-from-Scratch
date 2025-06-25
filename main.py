@@ -7,6 +7,8 @@ if __name__ == "__main__":
         add.add(args[1:])
     elif args[0] == "ls-files":
         ls_files.ls_files()
+    elif args[0] == "rm":
+        rm.rm(args[1:])
     else:
         print("Commande inconnue :", args[0])
 

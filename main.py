@@ -5,6 +5,8 @@ if __name__ == "__main__":
     args = sys.argv[1:]
     if args[0] == "add":
         add.add(args[1:])
+    elif args[0] == "ls-files":
+        ls_files.ls_files()
     else:
         print("Commande inconnue :", args[0])
 

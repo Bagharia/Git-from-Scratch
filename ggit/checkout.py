@@ -30,7 +30,6 @@ def git_checkout(target, new_branch=False):
 
     print(f"[DEBUG] Object {commit_sha} is of type: {get_object_type(commit_sha)}")
     print(f"[DEBUG] Checkout commit_sha: {commit_sha} (len={len(commit_sha)})")
-    tree_sha, _ = parse_commit(commit_sha)
 
     try:
         tree_sha, _ = parse_commit(commit_sha)

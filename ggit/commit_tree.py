@@ -36,7 +36,7 @@ def commit_tree(tree_sha: str, message: str, parent: str | None = None):
 
     # Écrire l'objet commit et afficher le SHA
     
-    commit_sha = compute_sha1_and_store(store)
+    commit_sha = compute_sha1_and_store(body, obj_type="commit")
     print(commit_sha)
 
     return commit_sha

@@ -12,6 +12,7 @@ from ggit.checkout import git_checkout
 from ggit.log import git_log
 from ggit.ls_files import git_ls_files
 from ggit.ls_tree import git_ls_tree
+from ggit.show_ref import git_show_ref
 
 def main():
     parser = argparse.ArgumentParser()
@@ -67,6 +68,9 @@ def main():
     ls_tree_parser = subparsers.add_parser("ls-tree")
     ls_tree_parser.add_argument("tree_sha")
 
+    # show-ref
+    subparsers.add_parser("show-ref")
+
     args = parser.parse_args()
 
     if args.command == "init":
@@ -97,6 +101,8 @@ def main():
         git_ls_files()
     elif args.command == "ls-tree":
         git_ls_tree(args.tree_sha)
+    elif args.command == "show-ref":
+        git_show_ref()
     else:
         print(f"Unknown command {args.command}")
 

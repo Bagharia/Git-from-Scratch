@@ -10,6 +10,7 @@ from ggit.commit import git_commit
 from ggit.status import git_status
 from ggit.checkout import git_checkout
 from ggit.log import git_log
+from ggit.ls_files import git_ls_files
 
 def main():
     parser = argparse.ArgumentParser()
@@ -58,6 +59,9 @@ def main():
     # log
     subparsers.add_parser("log")
 
+    # ls-files
+    subparsers.add_parser("ls-files")
+
     args = parser.parse_args()
 
     if args.command == "init":
@@ -84,6 +88,8 @@ def main():
         git_checkout(args.target, args.branch)
     elif args.command == "log":
         git_log()
+    elif args.command == "ls-files":
+        git_ls_files()
     else:
         print(f"Unknown command {args.command}")
 

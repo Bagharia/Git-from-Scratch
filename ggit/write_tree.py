@@ -19,30 +19,19 @@ def write_tree():
             sha, path = line.strip().split(" ", 1)
 
             # 3. Prépare l’entrée binaire du tree
-            mode = b"100644"                     # fichier « normal »
-            filename = path.encode()  # encodage en bytes UTF-8
+            mode = b"100644"  # fichier « normal »
+            filename = path.encode("utf-8")
             sha_bin = bytes.fromhex(sha)
-
-            # 4. Ajoute l’entrée à la liste
-            entry = mode + b" " + filename+ b"\x00" + sha_bin
+            if len(sha_bin) != 20:
+                print(f"[ERREUR] SHA1 mal formé pour {path} : {sha}")
+                continue
+            # Debug :
+            # print(f"DEBUG: mode={mode}, filename={filename}, sha={sha}, sha_bin={sha_bin.hex()}, len(sha_bin)={len(sha_bin)}")
+            entry = mode + b" " + filename + b"\x00" + sha_bin
             entries.append(entry)
 
     # 5. Construit le contenu complet de l’objet tree
     tree_content = b"".join(entries)
-    # Attention : on doit passer le contenu *sans* header à compute_sha1_and_store car la fonction
-    # elle-même ajoute le header (cf. ta fonction)
     tree_sha = compute_sha1_and_store(tree_content, obj_type="tree")
     print(tree_sha)
     return tree_sha
-
-    # # 6. Crée l’en-tête (header) et concatène
-    # header = f"tree {len(tree_content)}\0".encode()
-    # store = header + tree_content
-
-    # # 7. Stocke l’objet (compression + écriture) et récupère son SHA
-    # tree_sha = compute_sha1_and_store(tree_content, obj_type="tree")
-
-    # # 8. Affiche le SHA du tree
-    # print(tree_sha)
-
-    # return tree_sha

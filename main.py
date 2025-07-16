@@ -11,6 +11,7 @@ from ggit.status import git_status
 from ggit.checkout import git_checkout
 from ggit.log import git_log
 from ggit.ls_files import git_ls_files
+from ggit.ls_tree import git_ls_tree
 
 def main():
     parser = argparse.ArgumentParser()
@@ -62,6 +63,10 @@ def main():
     # ls-files
     subparsers.add_parser("ls-files")
 
+    # ls-tree
+    ls_tree_parser = subparsers.add_parser("ls-tree")
+    ls_tree_parser.add_argument("tree_sha")
+
     args = parser.parse_args()
 
     if args.command == "init":
@@ -90,6 +95,8 @@ def main():
         git_log()
     elif args.command == "ls-files":
         git_ls_files()
+    elif args.command == "ls-tree":
+        git_ls_tree(args.tree_sha)
     else:
         print(f"Unknown command {args.command}")
 

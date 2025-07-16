@@ -13,7 +13,7 @@ def commit_tree(tree_sha: str, message: str, parent: str | None = None):
         print(f"fatal: bad tree object {tree_sha}")
         return
 
-    # Construire le corps du commit (utf‑8 → bytes)
+    # Construire le corps du commit (utf-8 → bytes)
 
     timestamp = int(time.time())
     tz        = "+0000"  # UTC pour simplifier
@@ -30,12 +30,7 @@ def commit_tree(tree_sha: str, message: str, parent: str | None = None):
 
     body = "\n".join(lines).encode()
 
-    # Header + concaténation
-
-    store = f"commit {len(body)}\0".encode() + body
-
     # Écrire l'objet commit et afficher le SHA
-    
     commit_sha = compute_sha1_and_store(body, obj_type="commit")
     print(commit_sha)
 

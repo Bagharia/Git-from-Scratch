@@ -24,13 +24,8 @@ def get_object(sha):
     with open(file_path, "rb") as f:
         decompressed = zlib.decompress(f.read())
 
-    nul_index = decompressed.find(b'\x00')
-    if nul_index == -1:
-        raise Exception("Objet mal formé: pas de header terminator")
-    
-    # On enlève le header (ex: "tree 123\0") et on ne garde que les données binaires utiles
-    content = decompressed[nul_index + 1:]
-    return content
+    # On retourne le contenu complet (header + body)
+    return decompressed
 
 HEAD_PATH = os.path.join(".ggit", "HEAD")
 

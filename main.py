@@ -9,6 +9,7 @@ from ggit.rm import git_rm
 from ggit.commit import git_commit  
 from ggit.status import git_status
 from ggit.checkout import git_checkout
+from ggit.log import git_log
 
 def main():
     parser = argparse.ArgumentParser()
@@ -54,6 +55,9 @@ def main():
     checkout_parser.add_argument("target")
     checkout_parser.add_argument("-b", "--branch", action="store_true")
 
+    # log
+    subparsers.add_parser("log")
+
     args = parser.parse_args()
 
     if args.command == "init":
@@ -78,6 +82,8 @@ def main():
     elif args.command == "checkout":
         from ggit.checkout import git_checkout
         git_checkout(args.target, args.branch)
+    elif args.command == "log":
+        git_log()
     else:
         print(f"Unknown command {args.command}")
 

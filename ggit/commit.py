@@ -6,6 +6,13 @@ from ggit.utils import get_object
 def read_tree_recursive(tree_sha, prefix=""):
     entries = {}
     tree_data = get_object(tree_sha)
+
+    # Enlève le header (ex: "tree 123\0") pour ne garder que le contenu
+    nul_index = tree_data.find(b'\x00')
+    if nul_index == -1:
+        raise ValueError("Objet tree mal formé (pas de terminateur d'en-tête)")
+    tree_data = tree_data[nul_index + 1:]
+
     i = 0
     while i < len(tree_data):
         space_idx = tree_data.find(b' ', i)

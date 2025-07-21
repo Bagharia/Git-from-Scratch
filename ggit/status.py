@@ -1,6 +1,7 @@
 import os
 import hashlib
 from ggit.utils import get_object
+from ggit.commit import read_tree_recursive
 
 def read_index():
     index_path = ".ggit/index"
@@ -47,33 +48,8 @@ def read_head_tree():
     except Exception:
         return {}
 
-    # Lire les entrées tree dans un dict path->sha
-    tree_files = {}
-
-    def read_tree(tree_sha, prefix=""):
-        tree_data = get_object(tree_sha)
-        i = 0
-        while i < len(tree_data):
-            space_idx = tree_data.find(b' ', i)
-            mode = tree_data[i:space_idx].decode()
-            i = space_idx + 1
-
-            null_idx = tree_data.find(b'\x00', i)
-            filename = tree_data[i:null_idx].decode()
-            i = null_idx + 1
-
-            sha_bin = tree_data[i:i+20]
-            sha = sha_bin.hex()
-            i += 20
-
-            full_path = os.path.join(prefix, filename)
-            if mode == "40000":  # tree (dir)
-                read_tree(sha, full_path)
-            else:
-                tree_files[full_path] = sha
-
-    read_tree(tree_sha)
-    return tree_files
+    # Lire les entrées tree en utilisant la fonction partagée
+    return read_tree_recursive(tree_sha)
 
 def read_working_dir():
     working_files = {}

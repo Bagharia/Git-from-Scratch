@@ -20,6 +20,19 @@ def git_checkout(target, new_branch=False):
         print(f"[branch created] {target} -> {head_sha}")
         return
 
+    branch_path = os.path.join(REFS_PATH, target)
+    object_exists = False
+    if os.path.exists(branch_path):
+        object_exists = True
+    else:
+        # Vérifie si le SHA correspond à un objet existant
+        obj_path = f".ggit/objects/{target[:2]}/{target[2:]}"
+        if os.path.exists(obj_path):
+            object_exists = True
+    if not object_exists:
+        print(f"[ERREUR] La branche '{target}' ou le commit '{target}' n'existe pas.")
+        return
+
     # Si target est une branche, on récupère le commit pointé par cette branche
     branch_path = os.path.join(REFS_PATH, target)
     if os.path.exists(branch_path):
